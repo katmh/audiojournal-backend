@@ -1,15 +1,15 @@
 import os
-from flask import Flask, request
-from airtable import Airtable
+from flask import Flask, request, render_template
+from airtable.airtable import Airtable
 app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    if request.method == 'POST':
-        airtable = Airtable('appnHKrgvz8qkq4ur', 'Entries', api_key = os.environ['AIRTABLE_API_KEY'])
+    airtable = Airtable('appnHKrgvz8qkq4ur', 'Entries')
 
+    if request.method == 'POST':
         airtable.insert({'Title': request.args['title']})
 
-        return airtable.get_all()[-1]
+        return airtable.get_all()
     else:
-        return 'Hello, World!'
+        return render_template('index.html', data=airtable.get_all())
