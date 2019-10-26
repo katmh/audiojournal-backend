@@ -1,15 +1,34 @@
 import os
 from flask import Flask, request, render_template
-from airtable.airtable import Airtable
+from entry import Entry
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
+
 app = Flask(__name__)
+
+# Use the application default credentials
+cred = credentials.ApplicationDefault()
+firebase_admin.initialize_app(cred, {
+  'projectId': "audio-journal",
+})
+
+db = firestore.client()
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    airtable = Airtable('appnHKrgvz8qkq4ur', 'Entries')
+    # airtable = Airtable('appnHKrgvz8qkq4ur', 'Entries')
 
     if request.method == 'POST':
-        airtable.insert({'Title': request.args['title']})
+        entry = Entry(name="", summary="", keywords="", transcript="", audio_file_url="", tags="", location="")
+        db.collection(u'entries').add(entry.to_dict())
+        # airtable.insert({'Title': request.args['title']})
 
-        return airtable.get_all()
+        users_ref = db.collection(u'entries')
+        docs = users_ref.stream()
+
+        return [u'{} => {}'.format(doc.id, doc.to_dict()) for doc in docs].join("\n")
     else:
-        return render_template('index.html', data=airtable.get_all())
+        users_ref = db.collection(u'entries')
+        docs = users_ref.stream()
+        return render_template('index.html', data=[Entry.from_dict(doc.to_dict()) for doc in docs])

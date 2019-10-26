@@ -7,9 +7,11 @@
     <title>Document</title>
 </head>
 <body>
-    {% for entry in data %}
-    <h3>{{ entry.fields.Title }}</h3>
-    <audio controls src="{{ entry.fields.File.url }}" />
+        return [u'{} => {}'.format(doc.id, doc.to_dict()) for doc in docs].join("\n")
+
+    {% for doc in data %}
+    <h3>{{ doc.name }}</h3>
+{#    <audio controls src="{{ entry.audio_file.url }}" />#}
     {% endfor %}
 </body>
 </html>
