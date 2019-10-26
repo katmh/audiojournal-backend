@@ -4,16 +4,22 @@ from entry import Entry
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
+from firebase_admin import storage
 
 app = Flask(__name__)
 
 cred = credentials.Certificate("/home/kat_m_huang/audio-journal-firebase-admin-sdk.json")
-firebase_admin.initialize_app(cred)
 firebase_admin.initialize_app(cred, {
-  'projectId': "audio-journal",
+    'projectId': "audio-journal",
+    'storageBucket': 'audio-journal.appspot.com'
 })
 
 db = firestore.client()
+
+def get_from_firebase(url):
+    bucket = storage.bucket()
+
+
 
 @app.route('/new_record', methods=['POST'])
 def new_record():
