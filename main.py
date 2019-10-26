@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect, url_for
 from entry import Entry
 import firebase_admin
 from firebase_admin import credentials
@@ -15,20 +15,14 @@ firebase_admin.initialize_app(cred, {
 
 db = firestore.client()
 
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    # airtable = Airtable('appnHKrgvz8qkq4ur', 'Entries')
+@app.route('/new_record', methods=['POST'])
+def new_record():
+    entry = Entry(name=request.json.name, summary="", keywords="", transcript="", audio_file_url=request.json.audio_file_url, tags="", location=request.json.location)
+    db.collection(u'entries').add(entry.to_dict())
+    return redirect(url_for('view'))
 
-    if request.method == 'POST':
-        entry = Entry(name="", summary="", keywords="", transcript="", audio_file_url="", tags="", location="")
-        db.collection(u'entries').add(entry.to_dict())
-        # airtable.insert({'Title': request.args['title']})
-
-        users_ref = db.collection(u'entries')
-        docs = users_ref.stream()
-
-        return [u'{} => {}'.format(doc.id, doc.to_dict()) for doc in docs].join("\n")
-    else:
-        users_ref = db.collection(u'entries')
-        docs = users_ref.stream()
-        return render_template('index.html', data=[Entry.from_dict(doc.to_dict()) for doc in docs])
+@app.route('/view', methods=['GET'])
+def view_all():
+    users_ref = db.collection(u'entries')
+    docs = users_ref.stream()
+    return render_template('index.html', data=[Entry.from_dict(doc.to_dict()) for doc in docs])
