@@ -7,8 +7,8 @@ from firebase_admin import firestore
 
 app = Flask(__name__)
 
-# Use the application default credentials
-cred = credentials.ApplicationDefault()
+cred = credentials.Certificate("/home/kat_m_huang/audio-journal-firebase-admin-sdk.json")
+firebase_admin.initialize_app(cred)
 firebase_admin.initialize_app(cred, {
   'projectId': "audio-journal",
 })
