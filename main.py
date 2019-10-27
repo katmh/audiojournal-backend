@@ -16,10 +16,8 @@ firebase_admin.initialize_app(cred, {
 
 db = firestore.client()
 
-def get_from_firebase(url):
-    bucket = storage.bucket()
-
-
+# def get_from_firebase(url):
+#     bucket = storage.bucket()
 
 @app.route('/new_record', methods=['POST'])
 def new_record():
