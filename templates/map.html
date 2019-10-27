@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Audio Journal - Map Insights</title>
+
+    <script src='https://api.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.css' rel='stylesheet'/>
+
+    <style>
+        .mapboxgl-popup {
+            max-width: 400px;
+            font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        }
+        .calculation-box {
+            height: 75px;
+            width: 150px;
+            position: absolute;
+            bottom: 40px;
+            left: 10px;
+            background-color: rgba(255, 255, 255, .9);
+            padding: 15px;
+            text-align: center;
+        }
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+
+</head>
+
+<body>
+<div id='map'></div>
+
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1Ijoia2F0bWgiLCJhIjoiY2p4dXB2ejQ0MTdtdzNtbnQyZDl0NWk2NiJ9.1B-fOSEJtIeGC86Zp9dPoQ';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [-77.04, 38.907],
+        zoom: 11.15
+    });
+
+    map.addControl(new mapboxgl.FullscreenControl());
+    map.addControl(new mapboxgl.NavigationControl());
+
+
+    map.on('load', function () {
+
+        map.addSource('10m-bathymetry-81bsvj', {
+            type: 'vector',
+            url: 'mapbox://mapbox.9tm8dx88'
+        });
+
+        map.addLayer({
+            "id": "10m-bathymetry-81bsvj",
+            "type": "fill",
+            "source": "10m-bathymetry-81bsvj",
+            "source-layer": "10m-bathymetry-81bsvj",
+            "layout": {},
+            "paint": {
+                "fill-outline-color": "hsla(337, 82%, 62%, 0)",
+// cubic bezier is a four point curve for smooth and precise styling
+// adjust the points to change the rate and intensity of interpolation
+                "fill-color": ["interpolate",
+                    ["cubic-bezier",
+                        0, 0.5,
+                        1, 0.5],
+                    ["get", "DEPTH"],
+                    200, "#78bced",
+                    9000, "#15659f"
+                ]
+            }
+        }, 'land-structure-polygon');
+// Add a layer showing the places.
+        //map.addLayer({
+        //    "id": "places",
+        //    "type": "symbol",
+          //  "source": {
+            //    "type": "geojson",
+              //  "data": {
+                //    "type": "FeatureCollection",
+                  //  "features": [{% for entry in entry_list %}
+                    //    {
+                      //      "type": "Feature",
+                        //    "properties": {
+                          //      "description": "<strong>{{ entry[1] }}</strong><p> {{ entry[2] }}</p>",
+                            //    "icon": "theatre"
+    //                        },
+      //                      "geometry": {
+        //                        "type": "Point",
+          //                      "coordinates": [{{ entry[7] }}]
+            //                }
+              //          },{% endfor %}]
+                //}
+            //},
+            //"layout": {
+              //  "icon-image": "{icon}-15",
+                //"icon-allow-overlap": true
+            //}
+        //});
+        map.on('click', 'places', function (e) {
+            var coordinates = e.features[0].geometry.coordinates.slice();
+            var description = e.features[0].properties.description;
+
+// Ensure that if the map is zoomed out such that multiple
+// copies of the feature are visible, the popup appears
+// over the copy being pointed to.
+            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            }
+
+            new mapboxgl.Popup()
+                .setLngLat(coordinates)
+                .setHTML(description)
+                .addTo(map);
+        });
+
+// Change the cursor to a pointer when the mouse is over the places layer.
+        map.on('mouseenter', 'places', function () {
+            map.getCanvas().style.cursor = 'pointer';
+        });
+
+// Change it back to a pointer when it leaves.
+        map.on('mouseleave', 'places', function () {
+            map.getCanvas().style.cursor = '';
+        });
+    });
+
+
+</script>
+</body>
+</html>

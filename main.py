@@ -42,3 +42,14 @@ def view_all():
 
 
     return render_template('index.html', data=entry_list)
+
+@app.route('/map', methods=['GET'])
+def view_all():
+    entry_list = []
+    with db.connect() as conn:
+        entries = conn.execute(
+            "SELECT * FROM journal.entries"
+        ).fetchall()
+        for row in entries:
+            entry_list.append(row)
+    return render_template('map.html', data=entry_list)
