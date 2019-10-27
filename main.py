@@ -23,23 +23,32 @@ SENTENCES_COUNT = 4
 
 app = Flask(__name__)
 
-db = sqlalchemy.create_engine(
-    sqlalchemy.engine.url.URL(
-        drivername='mysql+pymysql',
-        username="service",
-        password="service",
-        database="journal",
-        query={
-            'unix_socket': '/cloudsql/audiojournal:us-east1:journal-db'
-        }
-    ),
+db_user = os.environ.get("DB_USER")
+db_pass = os.environ.get("DB_PASS")
+db_name = os.environ.get("DB_NAME")
+cloud_sql_connection_name = os.environ.get("CLOUD_SQL_CONNECTION_NAME")
 
-    pool_size=5,
-    max_overflow=2,
-    pool_timeout=30,
-    pool_recycle=1800,
+unix_socket = '/cloudsql/{}'.format(cloud_sql_connection_name)
+engine_url = 'mysql+pymysql://{}:{}@/{}?unix_socket={}'.format(db_user, db_pass, db_name, unix_socket)
+db = sqlalchemy.create_engine(engine_url, pool_size=3)
 
-)
+# db = sqlalchemy.create_engine(
+#     sqlalchemy.engine.url.URL(
+#         drivername='mysql+pymysql',
+#         username=db_user,
+#         password=db_pass,
+#         database=db_name,
+#         query={
+#             'unix_socket': '/cloudsql/{}'.format(cloud_sql_connection_name)
+#         }
+#     ),
+#
+#     pool_size=5,
+#     max_overflow=2,
+#     pool_timeout=30,
+#     pool_recycle=1800,
+#
+# )
 
 @app.route('/new_record', methods=['POST'])
 def new_record():
@@ -95,7 +104,7 @@ def view_all():
     return render_template('index.html', data=entry_list)
 
 @app.route('/map', methods=['GET'])
-def view_all():
+def map():
     entry_list = []
     with db.connect() as conn:
         entries = conn.execute(
