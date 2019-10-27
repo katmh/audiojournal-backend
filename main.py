@@ -13,6 +13,7 @@ from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lsa import LsaSummarizer as Summarizer
 from sumy.nlp.stemmers import Stemmer
 from sumy.utils import get_stop_words
+import datetime
 
 textrazor.api_key = "737f0a9b50f351c7190769d5cc4b584a59b8341fd632a0572892ebb0"
 client = textrazor.TextRazor(extractors=["entities", "topics"])
@@ -57,7 +58,7 @@ def new_record():
         topics.append(topic.label)
 
 
-    parser = PlaintextParser.from_string(entry.transcript, Tokenizer(LANGUAGE))
+    parser = PlaintextParser.from_string(entry["transcript"], Tokenizer(LANGUAGE))
 
     stemmer = Stemmer(LANGUAGE)
 
@@ -77,7 +78,7 @@ def new_record():
     )
 
     with db.connect() as conn:
-          conn.execute(stmt, name=entry.name, time=time_cast, summary=summary_sentances.join(". "), keywords=json.dumps(topics), transcript=entry.transcript, audio_file=None, tags=json.dumps(["patient"]), location=entry.location)
+          conn.execute(stmt, name=entry["name"], time=time_cast, summary=". ".join(summary_sentances), keywords=json.dumps(topics), transcript=entry["transcript"], audio_file=None, tags=json.dumps(["patient"]), location=entry["location"])
 
     return redirect(url_for('view'))
 
