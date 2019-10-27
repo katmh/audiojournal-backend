@@ -1,6 +1,5 @@
 import os
 from flask import Flask, request, render_template, redirect, url_for
-from entry import Entry
 import sqlalchemy
 import json
 
@@ -26,6 +25,7 @@ db = sqlalchemy.create_engine(
 
 # @app.route('/new_record', methods=['POST'])
 # def new_record():
+
 #     entry = Entry(name=request.json.name, summary="", keywords="", transcript="", tags="", location=request.json.location)
 #     db.collection(u'entries').add(entry.to_dict())
 #     return redirect(url_for('view'))
