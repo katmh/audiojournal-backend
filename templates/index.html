@@ -1,265 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Audio Journal</title>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: system-ui, Arial, sans-serif;
-        }
-        .container {
-            width: 90%;
-            margin: 0 auto;
-            max-width: 1100px;
-        }
-        header {
-            padding: 2.5rem 0 1rem;
-            height: 16vh;
-        }
-        .row {
-            height: 84vh;
-        }
-        h1 {
-            font: 800 3rem/100% system-ui;
-        }
-        h2 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-        h3 {
-            font-size: 1.3rem;
-            margin-bottom: .5rem;
-            display: inline-block;
-        }
-        .date {
-            float: right;
-            font-size: .85rem;
-            color: #888;
-            font-style: italic;
-        }
-        .active .date {
-            color: #ddd;
-        }
-        .tags li {
-            list-style: none;
-            display: inline-block;
-        }
-        .tags a {
-            text-decoration: none;
-            padding: .1rem .4rem;
-            background: #ededed;
-            color: #222;
-            display: block;
-            margin-right: .2rem;
-            border-radius: .5rem;
-            transition: .1s;
-            font-size: .8rem;
-        }
-        .tags a:hover {
-            background: #dcdcdc;
-        }
-        .entries {
-            overflow-y: scroll;
-        }
-        @media (min-width: 50rem) {
-            .two-col-grid {
-                grid-template-columns: 1fr 2fr;
-                grid-column-gap: 1rem;
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Audio Journal</title>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+                integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+                crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+                integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+                crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+                integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+                crossorigin="anonymous"></script>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: system-ui, Arial, sans-serif;
             }
-        }
-        .list-group-item {
-            cursor: pointer;
-        }
-        .list-group-item ul {
-            margin-bottom: .1rem;
-        }
-        p {
-            color: #444;
-            font-size: .9rem;
-            line-height: 140%;
-            margin: 1rem 0;
-        }
-        .entries {
-            overflow-y: scroll;
-            height: 100%;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1>Audio Journal</h1>
-        </header>
 
-        <div class="row">
-  <div class="col-4">
-    <div class="list-group entries" id="list-tab" role="tablist">
-      <div class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">
-          <h3>Jane Doe</h3>
-          <span class="date">Oct 13 2019</span>
-          <ul class="tags">
-                <li><a href="">Flu</a></li>
-                <li><a href="">Fever</a></li>
-                <li><a href="">Congestion</a></li>
-                <li><a href="">Stress</a></li>
-            </ul>
-      </div>
+            .container {
+                width: 90%;
+                margin: 0 auto;
+                max-width: 1100px;
+            }
 
-      <div class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">
-          <h3>John Smith</h3>
-          <span class="date">Oct 11 2019</span>
-            <audio src=""></audio>
-            <ul class="tags">
-                <li><a href="">Colonoscopy</a></li>
-                <li><a href="">IBS</a></li>
-                <li><a href="">Acid Reflux</a></li>
-            </ul>
-      </div>
+            header {
+                padding: 2.5rem 0 1rem;
+                height: 16vh;
+            }
 
-      <div class="list-group-item list-group-item-action" id="list-messages-list" data-toggle="list" href="#list-messages" role="tab" aria-controls="messages">
-          <h3>Henry Ford</h3>
-          <span class="date">Oct 11 2019</span>
-            <audio src=""></audio>
-            <ul class="tags">
-                <li><a href="">Occupational Hazard</a></li>
-                <li><a href="">Stress</a></li>
-            </ul>
-      </div>
+            .row {
+                height: 84vh;
+            }
 
-      <div class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings">
-          <h3>Taylor Swift</h3>
-          <span class="date">Oct 09 2019</span>
-            <audio src=""></audio>
-            <ul class="tags">
-                <li><a href="">Fatigue</a></li>
-                <li><a href="">Vitamin</a></li>
-                <li><a href="">Travel</a></li>
-            </ul>
-      </div>
+            h1 {
+                font: 800 3rem/100% system-ui;
+            }
 
-      <div class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">
-          <h3>Jane Doe</h3>
-          <span class="date">Oct 13 2019</span>
-          <ul class="tags">
-                <li><a href="">Flu</a></li>
-                <li><a href="">Fever</a></li>
-                <li><a href="">Congestion</a></li>
-                <li><a href="">Stress</a></li>
-            </ul>
-      </div>
+            h2 {
+                font-size: 1.8rem;
+                font-weight: 700;
+                margin-bottom: 1rem;
+            }
 
-      <div class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">
-          <h3>John Smith</h3>
-          <span class="date">Oct 11 2019</span>
-            <audio src=""></audio>
-            <ul class="tags">
-                <li><a href="">Colonoscopy</a></li>
-                <li><a href="">IBS</a></li>
-                <li><a href="">Acid Reflux</a></li>
-            </ul>
-      </div>
+            h3 {
+                font-size: 1.3rem;
+                margin-bottom: .5rem;
+                display: inline-block;
+            }
 
-      <div class="list-group-item list-group-item-action" id="list-messages-list" data-toggle="list" href="#list-messages" role="tab" aria-controls="messages">
-          <h3>Henry Ford</h3>
-          <span class="date">Oct 11 2019</span>
-            <audio src=""></audio>
-            <ul class="tags">
-                <li><a href="">Occupational Hazard</a></li>
-                <li><a href="">Stress</a></li>
-            </ul>
-      </div>
+            .date {
+                float: right;
+                font-size: .85rem;
+                color: #888;
+                font-style: italic;
+            }
 
-      <div class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings">
-          <h3>Taylor Swift</h3>
-          <span class="date">Oct 09 2019</span>
-            <audio src=""></audio>
-            <ul class="tags">
-                <li><a href="">Fatigue</a></li>
-                <li><a href="">Vitamin</a></li>
-                <li><a href="">Travel</a></li>
-            </ul>
-      </div>
-    </div>
-  </div>
-  <div class="col-8">
-    <div class="tab-content" id="nav-tabContent">
-      <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
-          <h2>Jane Doe</h2>
-          <audio controls src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
-          <p><b>Summary:</b> Acquired immunodeficiency syndrome anthrax bacillus anthracis argentine hemorrhagic fever junin virus black piedra piedraia hortae blastomycosis blastomyces dermatitidis chagas disease cchf enterococcus infection enterococcus genus hhv-7 o111 human metapneumovirus infection human metapneumovirus mono flu pediculus humanus capitis spirillum minus rsv rift valley fever virus vzv variola major taeniasis taenia genus barber's itch athlete's foot trichophyton visceral larva migrans whipworm infection tuberculosis ureaplasma urealyticum. Argentine hemorrhagic fever junin virus astrovirus infection astroviridae family campylobacteriosis campylobacter genus cellulitis trypanosoma cruzi gss prion hsv-2 measles measles virus nvcjd pediculosis pubis scabies sarcoptes scabiei venezuelan equine encephalitis.</p>
-          <p><b>Keywords:</b></p>
-          <p><b>Full transcript:</b></p>
-      </div>
-      <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">...</div>
-      <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">...</div>
-      <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">...</div>
-    </div>
-  </div>
-</div>
+            .active .date {
+                color: #ddd;
+            }
 
-        <!--<section class="two-col-grid row">
-            <section class="entries list-group">
-                <article class="entry list-group-item">
-                    <h3>Jane Doe</h3>
-                    <audio src=""></audio>
-                    <ul class="tags">
-                        <li><a href="">Flu</a></li>
-                        <li><a href="">Fever</a></li>
-                        <li><a href="">Congestion</a></li>
-                        <li><a href="">Stress</a></li>
-                    </ul>
-                </article>
+            .tags li {
+                list-style: none;
+                display: inline-block;
+            }
 
-                <article class="entry list-group-item">
-                    <h3>John Smith</h3>
-                    <audio src=""></audio>
-                    <ul class="tags">
-                        <li><a href="">Colonoscopy</a></li>
-                        <li><a href="">IBS</a></li>
-                        <li><a href="">Acid Reflux</a></li>
-                    </ul>
-                </article>
+            .tags a {
+                text-decoration: none;
+                padding: .1rem .4rem;
+                background: #ededed;
+                color: #222;
+                display: block;
+                margin-right: .2rem;
+                border-radius: .5rem;
+                transition: .1s;
+                font-size: .8rem;
+            }
 
-                <article class="entry list-group-item">
-                    <h3>Henry Ford</h3>
-                    <audio src=""></audio>
-                    <ul class="tags">
-                        <li><a href="">Occupational Hazard</a></li>
-                        <li><a href="">Stress</a></li>
-                    </ul>
-                </article>
+            .tags a:hover {
+                background: #dcdcdc;
+            }
 
-                <article class="entry list-group-item">
-                    <h3>Taylor Swift</h3>
-                    <audio src=""></audio>
-                    <ul class="tags">
-                        <li><a href="">Fatigue</a></li>
-                        <li><a href="">Vitamin</a></li>
-                        <li><a href="">Travel</a></li>
-                    </ul>
-                </article>
-            </section>
+            .entries {
+                overflow-y: scroll;
+            }
 
-            <section>
-                <h2>Jane Doe - Details</h2>
-            </section>
-        </section>-->
-    </div>
+            @media (min-width: 50rem) {
+                .two-col-grid {
+                    grid-template-columns: 1fr 2fr;
+                    grid-column-gap: 1rem;
+                }
+            }
 
-    <!--
-    {% for doc in data %}
-    <h3>{{ doc.name }}</h3>
-    {% endfor %}
-    -->
-</body>
+            .list-group-item {
+                cursor: pointer;
+            }
+
+            .list-group-item ul {
+                margin-bottom: .1rem;
+            }
+
+            p {
+                color: #444;
+                font-size: .9rem;
+                line-height: 140%;
+                margin: 1rem 0;
+            }
+
+            .entries {
+                overflow-y: scroll;
+                height: 100%;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <header>
+                <h1>Audio Journal</h1>
+            </header>
+
+            <div class="row">
+                <div class="col-4">
+                    <div class="list-group entries" id="list-tab" role="tablist">
+                        {% for entry in entry_list %}
+                            <div class="list-group-item list-group-item-action" id="list-home-list" data-toggle="list"
+                                 href="#list-home" role="tab" aria-controls="home">
+                                <h3>{{ entry.name }}</h3>
+                                <ul class="tags">
+                                    {% for tag in entry.tags %}
+                                        <li><a href="">{{ tag }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="col-8">
+                    <div class="tab-content" id="nav-tabContent">
+                        {% for entry in entry_list %}
+                        <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
+                            <h2>{{ entry.name }}</h2>
+                            <audio controls src="{{ entry.audio }}"></audio>
+                            <p><b>Summary:</b> {{ entry.summary }}</p>
+                            <p><b>Keywords:</b> {% for tag in entry.tags %}{{ tag }}{% endfor %}</p>
+                            <p><b>Full transcript:</b> {{ entry.transcript }}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
 </html>
