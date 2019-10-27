@@ -24,11 +24,11 @@ db = sqlalchemy.create_engine(
 
 )
 
-@app.route('/new_record', methods=['POST'])
-def new_record():
-    entry = Entry(name=request.json.name, summary="", keywords="", transcript="", tags="", location=request.json.location)
-    db.collection(u'entries').add(entry.to_dict())
-    return redirect(url_for('view'))
+# @app.route('/new_record', methods=['POST'])
+# def new_record():
+#     entry = Entry(name=request.json.name, summary="", keywords="", transcript="", tags="", location=request.json.location)
+#     db.collection(u'entries').add(entry.to_dict())
+#     return redirect(url_for('view'))
 
 @app.route('/view', methods=['GET'])
 def view_all():
@@ -40,7 +40,7 @@ def view_all():
         ).fetchall()
         # Convert the results into a list of dicts representing votes
         for row in entries:
-            entry_list.append(Entry(row[1], row[2], json.loads(row[3]), row[4], json.loads(row[5]), row[6]))
+            entry_list.append(row)
 
 
     return render_template('index.html', data=entry_list)
