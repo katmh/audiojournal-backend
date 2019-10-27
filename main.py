@@ -34,11 +34,9 @@ db = sqlalchemy.create_engine(
 def view_all():
     entry_list = []
     with db.connect() as conn:
-        # Execute the query and fetch all results
         entries = conn.execute(
             "SELECT * FROM journal.entries"
         ).fetchall()
-        # Convert the results into a list of dicts representing votes
         for row in entries:
             entry_list.append(row)
 
